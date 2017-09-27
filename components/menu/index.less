@@ -1,0 +1,51 @@
+h1 {
+    background-color: chartreuse;
+}
+.menu {
+    &._open {
+        .menu__title::before {
+            content: '▼';
+        }
+
+        .menu__list {
+            display: block;
+        }
+
+        .btn {
+            display: block;
+        }
+    }
+
+    &__title {
+        position: relative;
+        padding-left: 20px;
+        cursor: pointer;
+        font-weight: normal;
+        font-size: 16px;
+        display: inline-block;
+        margin: 0;
+
+        &::before {
+            position: absolute;
+            left: 0;
+            top: 0;
+            content: '▶';
+            width: 10px;
+            height: 0;
+            color: green;
+        }
+    }
+
+    &__list {
+        list-style: none;
+        padding-left: 20px;
+        margin: 0;
+        font-size: 14px;
+        display: none;
+    }
+
+    sup {
+        color: red;
+        cursor: pointer;
+    }
+}
