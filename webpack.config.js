@@ -4,7 +4,8 @@ module.exports = {
     devtool: 'source-map',
     context: path.resolve('components'),
     entry: {
-        app: './app/index.js'
+        common: './common/index.js'
+        ,app: './app/index.js'
         ,menu: './menu/index.js'
     },
     output: {

@@ -32,12 +32,7 @@
         }
 
         initEvents() {
-            this.$title.addEventListener('click', this.toggleDisplayMenu.bind(this));
             this.$menuList.addEventListener('click', this.removeItem.bind(this));
-        }
-
-        toggleDisplayMenu() {
-            this.$el.classList.toggle('_open');
         }
 
         removeItem(ev) {
@@ -45,7 +40,7 @@
                 currentItem,
                 currentList;
 
-            if (currentRemoveIcon.tagName == 'SUP') {
+            if (currentRemoveIcon.tagName == 'I') {
                 // для поддержки в IE11-
                 currentItem = currentRemoveIcon.closest('li');
                 currentList = currentItem.closest('ul');
@@ -54,16 +49,18 @@
         }
 
         _addItem(item, container) {
-            let itemText = item.title,
-                ulEl = document.createElement('ul'),
+            let ulEl = document.createElement('ul'),
                 liEl = document.createElement('li'),
-                spanEl = document.createElement('span'),
-                removeIcon = document.createElement('sup');
+                link = document.createElement('a'),
+                removeIcon = document.createElement('i');
 
-            spanEl.textContent = itemText;
-            removeIcon.textContent = ' x';
+            link.textContent = item.title;
+            link.classList.add('menu__link');
+            link.href = item.url;
+            removeIcon.classList.add('close');
 
-            liEl.append(spanEl, removeIcon);
+            liEl.classList.add('menu__item');
+            liEl.append(link, removeIcon);
 
             if (item.items) { // а здесь нужно рекурсивно вызвать renderItems,
                 liEl.append(ulEl);

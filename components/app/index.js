@@ -1,6 +1,8 @@
 (function() {
     'use strict';
 
+    require('./index.less');
+
     // import
     const Menu = window.Menu;
 
@@ -17,23 +19,18 @@
             this.menu.setData({
                 title: 'Сайты',
                 items: [
-                    {title: 'Первый'},
                     {
-                        title: 'Второй',
-                        items: [
-                            {title: 'Второй-первый'},
-                            {
-                                title: 'Второй-второй',
-                                items: [
-                                    {title: 'Второй-второй-1'},
-                                    {title: 'Второй-второй-2'},
-                                    {title: 'Второй-второй-3'}
-                                ]
-                            },
-                        ]
+                        title: 'Медуза',
+                        url: 'https://meduza.io/'
                     },
-                    {title: 'Третий'},
-                    {title: 'Четвертый'}
+                    {
+                        title: 'Яндекс.Новости',
+                        url: 'https://news.yandex.ru/'
+                    },
+                    {
+                        title: 'BBC news',
+                        url: 'http://www.bbc.com/news'
+                    }
                 ]
             });
         }
