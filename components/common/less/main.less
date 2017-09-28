@@ -1,3 +1,5 @@
+@import (reference) './variables';
+
 *, *:before, *:after {
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
@@ -18,12 +20,12 @@ html {
 }
 
 body {
-    background-color: black;
+    background-color: @black;
     font-size: 14px;
 }
 
 .main-title {
-    background-color: white;
+    background-color: @white;
     text-align: center;
     padding: 1rem 0;
 }
