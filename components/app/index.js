@@ -5,6 +5,7 @@
 
     // import
     const Menu = window.Menu;
+    const Form = window.Form;
 
     class App {
         constructor ({el}) {
@@ -33,6 +34,10 @@
                     }
                 ]
             });
+
+            this.form = new Form({
+                el: el.querySelector('.js-form')
+            })
         }
     }
 

@@ -1,0 +1,69 @@
+@import (reference) '../common/less/variables';
+
+.form {
+    padding: 1.5rem;
+
+    &__row {
+        position: relative;
+        font-size: 0;
+    }
+
+    &__input {
+        display: inline-block;
+        width: 100%;
+        border: 1px solid @border-color;
+        border-radius: .5rem;
+        font-size: 16px;
+        padding: .8rem 1rem;
+        box-shadow: none;
+        -webkit-appearance: none;
+
+        &::-webkit-input-placeholder,
+        &:-moz-placeholder,
+        &::-moz-placeholder,
+        &:-ms-input-placeholder {
+            color: @gray;
+        }
+
+        &:first-child {
+            margin-right: 2%;
+
+            @media @mobile {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+        }
+
+        &:focus:invalid {
+            border-color: @red;
+        }
+
+        &_small {
+            width: 35%;
+
+            @media @mobile {
+                width: 100%;
+            }
+        }
+    }
+
+    &__btn {
+        width: 25%;
+        margin-left: 3%;
+        background-color: @black;
+        color: @white;
+        vertical-align: top;
+        font-size: 16px;
+        padding: .8rem 2rem;
+
+        @media @mobile {
+            width: 100%;
+            margin-left: 0;
+            margin-top: 1rem;
+        }
+
+        &:hover {
+            background-color: @green;
+        }
+    }
+}
