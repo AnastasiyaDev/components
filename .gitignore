@@ -1,5 +1,4 @@
 # Build and Release Folders
-public/
 .idea/
 node_modules/
 npm-debug.log
