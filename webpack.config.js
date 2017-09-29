@@ -1,3 +1,4 @@
+var env = process.env.NODE_ENV;
 var path = require('path');
 
 module.exports = {
@@ -10,9 +11,9 @@ module.exports = {
         ,form: './form/index.js'
     },
     output: {
-        path: path.join(__dirname),
+        path: path.join(__dirname, 'public'),
         filename: '[name].js',
-        publicPath: '/public'
+        publicPath: '/dist'
     },
     module: {
         loaders: [

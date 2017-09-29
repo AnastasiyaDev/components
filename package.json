@@ -5,7 +5,8 @@
   "main": "idnex.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack-dev-server --hot --inline"
+    "dev": "NODE_ENV=development webpack-dev-server --hot --inline",
+    "prod": "NODE_ENV=production webpack --env=prod --progress --profile --colors"
   },
   "keywords": [],
   "author": "Asya Bakhnar",
