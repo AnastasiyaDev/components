@@ -8,31 +8,31 @@
             this.$el  = el;
             this.data = data;
 
-            this.$el          = el;
             this.$title       = el.querySelector('.js-title');
             this.$menuList    = el.querySelector('.js-menu-list');
 
             this.initEvents();
         }
 
-        setData (data) {
+        setData(data) {
             this.data = data;
             this.render();
         }
 
-        render () {
+        render() {
             this.$title.innerText = this.data.title;
-            this.renderItems(this.data.items, this.$menuList);
+            this.renderItems(this.data.items);
         }
 
-        renderItems(items, container) {
+        renderItems(items) {
             items.forEach(item => {
-                this._addItem(item, container); // пусть _addItem работает только с одним элментом
+                this._addItem(item);
             });
         }
 
         initEvents() {
             this.$menuList.addEventListener('click', this.removeItem.bind(this));
+            document.addEventListener('addItem', this.addCustomerItem.bind(this));
         }
 
         removeItem(ev) {
@@ -48,9 +48,12 @@
             }
         }
 
-        _addItem(item, container) {
-            let ulEl = document.createElement('ul'),
-                liEl = document.createElement('li'),
+        addCustomerItem(ev) {
+            this._addItem(ev.detail);
+        }
+
+        _addItem(item) {
+            let liEl = document.createElement('li'),
                 link = document.createElement('a'),
                 removeIcon = document.createElement('i');
 
@@ -62,12 +65,7 @@
             liEl.classList.add('menu__item');
             liEl.append(link, removeIcon);
 
-            if (item.items) { // а здесь нужно рекурсивно вызвать renderItems,
-                liEl.append(ulEl);
-                this.renderItems(item.items, ulEl); // указываем, что рендерим и куда
-            }
-
-            container.append(liEl);
+            this.$menuList.append(liEl);
         }
     }
 
