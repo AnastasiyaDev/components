@@ -33,6 +33,10 @@ module.exports = {
             {
                 test: /\.less$/,
                 loaders: ['style-loader', 'css-loader', 'less-loader']
+            },
+            {
+                test: /\.hbs$/,
+                loader: "handlebars-loader"
             }
         ]
     }

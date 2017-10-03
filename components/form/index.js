@@ -2,6 +2,7 @@
     'use strict';
 
     require('./index.less');
+    let formTempl = require('./template/form.hbs');
 
     class Form {
         constructor ({el}) {
@@ -12,29 +13,14 @@
         }
 
         renderForm() {
-            this.$container.innerHTML = `
-              <form class="form js-add-item-form">
-				<div class="form__row">
-                    <input class="form__input form__input_small"
-                           type="url" 
-                           name="url"
-                           required
-                           placeholder="url">
-                    <input class="form__input form__input_small"
-                           type="text" 
-                           name="title"
-                           required
-                           placeholder="title">
-                    <button class="form__btn" type="submit">Добавить</button>
-				</div>
-			</form>`;
+            this.$container.innerHTML = formTempl();
         }
 
         initEvents() {
             this.$container.addEventListener('submit', this.submitForm.bind(this));
         }
 
-         submitForm(ev) {
+        submitForm(ev) {
             ev.preventDefault();
 
             let $form       = ev.target,

@@ -2,6 +2,7 @@
     'use strict';
 
     require('./index.less');
+    let menuTempl = require('./template/menu.hbs');
 
     class Menu {
         constructor({el, data}) {
@@ -40,7 +41,7 @@
                 currentItem,
                 currentList;
 
-            if (currentRemoveIcon.tagName == 'I') {
+            if (currentRemoveIcon.classList.contains('js-close')) {
                 // для поддержки в IE11-
                 currentItem = currentRemoveIcon.closest('li');
                 currentList = currentItem.closest('ul');
@@ -53,19 +54,7 @@
         }
 
         _addItem(item) {
-            let liEl = document.createElement('li'),
-                link = document.createElement('a'),
-                removeIcon = document.createElement('i');
-
-            link.textContent = item.title;
-            link.classList.add('menu__link');
-            link.href = item.url;
-            removeIcon.classList.add('close');
-
-            liEl.classList.add('menu__item');
-            liEl.append(link, removeIcon);
-
-            this.$menuList.append(liEl);
+            this.$menuList.insertAdjacentHTML('beforeEnd', menuTempl(item));
         }
     }
 
