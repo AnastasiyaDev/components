@@ -41,7 +41,7 @@
                 currentItem,
                 currentList;
 
-            if (currentRemoveIcon.tagName == 'I') {
+            if (currentRemoveIcon.classList.contains('js-close')) {
                 // для поддержки в IE11-
                 currentItem = currentRemoveIcon.closest('li');
                 currentList = currentItem.closest('ul');
