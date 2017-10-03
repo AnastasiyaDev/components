@@ -63,11 +63,12 @@
 /******/ 	__webpack_require__.p = "/dist";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 7);
+/******/ 	return __webpack_require__(__webpack_require__.s = 29);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 2:
 /***/ (function(module, exports) {
 
 /*
@@ -149,7 +150,94 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 1 */
+
+/***/ 25:
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(33);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(3)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/less-loader/dist/cjs.js!./index.less", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/less-loader/dist/cjs.js!./index.less");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ 29:
+/***/ (function(module, exports, __webpack_require__) {
+
+(function() {
+    'use strict';
+
+    __webpack_require__(25);
+
+    // import
+    const Menu = window.Menu;
+    const Form = window.Form;
+
+    class App {
+        constructor ({el}) {
+            this.menu = new Menu({
+                el: el.querySelector('.js-menu'),
+                data: {
+                    title: 'Сайты',
+                    items: []
+                }
+            });
+
+            this.menu.setData({
+                title: 'Сайты',
+                items: [
+                    {
+                        title: 'Медуза',
+                        url: 'https://meduza.io/'
+                    },
+                    {
+                        title: 'Яндекс.Новости',
+                        url: 'https://news.yandex.ru/'
+                    },
+                    {
+                        title: 'BBC news',
+                        url: 'http://www.bbc.com/news'
+                    }
+                ]
+            });
+
+            this.form = new Form({
+                el: el.querySelector('.js-form')
+            })
+        }
+    }
+
+    // export
+    window.App = App;
+
+})();
+
+
+/***/ }),
+
+/***/ 3:
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -186,7 +274,7 @@ var stylesInDom = {},
 	singletonElement = null,
 	singletonCounter = 0,
 	styleElementsInsertedAtTop = [],
-	fixUrls = __webpack_require__(2);
+	fixUrls = __webpack_require__(4);
 
 module.exports = function(list, options) {
 	if(typeof DEBUG !== "undefined" && DEBUG) {
@@ -462,7 +550,23 @@ function updateLink(linkElement, options, obj) {
 
 
 /***/ }),
-/* 2 */
+
+/***/ 33:
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".app {\n  width: 70%;\n  max-width: 600px;\n  transform: translateY(-50%) translateX(-50%);\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  background-color: #fff;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ 4:
 /***/ (function(module, exports) {
 
 
@@ -556,110 +660,7 @@ module.exports = function (css) {
 };
 
 
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(11);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/less-loader/dist/cjs.js!./index.less", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/less-loader/dist/cjs.js!./index.less");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 4 */,
-/* 5 */,
-/* 6 */,
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-(function() {
-    'use strict';
-
-    __webpack_require__(3);
-
-    // import
-    const Menu = window.Menu;
-    const Form = window.Form;
-
-    class App {
-        constructor ({el}) {
-            this.menu = new Menu({
-                el: el.querySelector('.js-menu'),
-                data: {
-                    title: 'Сайты',
-                    items: []
-                }
-            });
-
-            this.menu.setData({
-                title: 'Сайты',
-                items: [
-                    {
-                        title: 'Медуза',
-                        url: 'https://meduza.io/'
-                    },
-                    {
-                        title: 'Яндекс.Новости',
-                        url: 'https://news.yandex.ru/'
-                    },
-                    {
-                        title: 'BBC news',
-                        url: 'http://www.bbc.com/news'
-                    }
-                ]
-            });
-
-            this.form = new Form({
-                el: el.querySelector('.js-form')
-            })
-        }
-    }
-
-    // export
-    window.App = App;
-
-})();
-
-
-/***/ }),
-/* 8 */,
-/* 9 */,
-/* 10 */,
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, ".app {\n  width: 70%;\n  max-width: 600px;\n  transform: translateY(-50%) translateX(-50%);\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  background-color: #fff;\n}\n", ""]);
-
-// exports
-
-
 /***/ })
-/******/ ]);
+
+/******/ });
 //# sourceMappingURL=app.js.map

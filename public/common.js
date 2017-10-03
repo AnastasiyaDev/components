@@ -63,11 +63,12 @@
 /******/ 	__webpack_require__.p = "/dist";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 30);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 2:
 /***/ (function(module, exports) {
 
 /*
@@ -149,7 +150,40 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 1 */
+
+/***/ 26:
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(34);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(3)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/less-loader/dist/cjs.js!./index.less", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/less-loader/dist/cjs.js!./index.less");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ 3:
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -186,7 +220,7 @@ var stylesInDom = {},
 	singletonElement = null,
 	singletonCounter = 0,
 	styleElementsInsertedAtTop = [],
-	fixUrls = __webpack_require__(2);
+	fixUrls = __webpack_require__(4);
 
 module.exports = function(list, options) {
 	if(typeof DEBUG !== "undefined" && DEBUG) {
@@ -462,7 +496,34 @@ function updateLink(linkElement, options, obj) {
 
 
 /***/ }),
-/* 2 */
+
+/***/ 30:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(26);
+
+
+/***/ }),
+
+/***/ 34:
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "*,\n*:before,\n*:after {\n  box-sizing: border-box;\n  -webkit-tap-highlight-color: transparent;\n}\n*:focus {\n  outline: none;\n}\nbody,\nhtml {\n  padding: 0;\n  margin: 0;\n}\nhtml {\n  font-family: sans-serif;\n  font-size: 10px;\n}\nbody {\n  background-color: #000000;\n  font-size: 14px;\n}\n.main-title {\n  background-color: #ffffff;\n  text-align: center;\n  padding: 1rem 0;\n  margin-top: 2rem;\n}\nul,\np,\nh1,\nh2 {\n  padding: 0;\n  margin: 0;\n  list-style-type: none;\n}\nbutton {\n  background: none;\n  border: none;\n  outline: none;\n  border-radius: 0;\n}\nimg {\n  max-width: 100%;\n  outline: none;\n  border: none;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ 4:
 /***/ (function(module, exports) {
 
 
@@ -556,68 +617,7 @@ module.exports = function (css) {
 };
 
 
-/***/ }),
-/* 3 */,
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(12);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/less-loader/dist/cjs.js!./index.less", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/less-loader/dist/cjs.js!./index.less");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-__webpack_require__(4);
-
-
-/***/ }),
-/* 9 */,
-/* 10 */,
-/* 11 */,
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "*,\n*:before,\n*:after {\n  box-sizing: border-box;\n  -webkit-tap-highlight-color: transparent;\n}\n*:focus {\n  outline: none;\n}\nbody,\nhtml {\n  padding: 0;\n  margin: 0;\n}\nhtml {\n  font-family: sans-serif;\n  font-size: 10px;\n}\nbody {\n  background-color: #000000;\n  font-size: 14px;\n}\n.main-title {\n  background-color: #ffffff;\n  text-align: center;\n  padding: 1rem 0;\n  margin-top: 2rem;\n}\nul,\np,\nh1,\nh2 {\n  padding: 0;\n  margin: 0;\n  list-style-type: none;\n}\nbutton {\n  background: none;\n  border: none;\n  outline: none;\n  border-radius: 0;\n}\nimg {\n  max-width: 100%;\n  outline: none;\n  border: none;\n}\n", ""]);
-
-// exports
-
-
 /***/ })
-/******/ ]);
+
+/******/ });
 //# sourceMappingURL=common.js.map
