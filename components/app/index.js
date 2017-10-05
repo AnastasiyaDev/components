@@ -9,6 +9,9 @@
 
     class App {
         constructor ({el}) {
+            this.$app = el;
+            this.serverUrl = 'https://components1808.firebaseio.com/menu/-Kvhzifyb_lsuVgKsNIc.json';
+
             this.menu = new Menu({
                 el: el.querySelector('.js-menu'),
                 data: {}
@@ -19,15 +22,15 @@
             });
 
             this.loadData();
+
+            this.initEvents();
         }
 
         /**
          * Load data from server
          */
         loadData() {
-            const url = '/data/mock.json',
-                  xhr = new XMLHttpRequest();
-
+            const xhr = new XMLHttpRequest();
 
             xhr.addEventListener('readystatechange', (event) => {
                 if (xhr.readyState === 4) {
@@ -39,8 +42,22 @@
                 }
             });
 
-            xhr.open('GET', url, true);
+            xhr.open('GET', this.serverUrl, true);
             xhr.send();
+        }
+
+        initEvents() {
+            this.$app.addEventListener('changeData', this.uploadData.bind(this));
+        }
+
+        /**
+         * Upload data to the server
+         */
+        uploadData() {
+            const xhr = new XMLHttpRequest();
+
+            xhr.open('PUT', this.serverUrl, true);
+            xhr.send(JSON.stringify(this.menu.data));
         }
     }
 
