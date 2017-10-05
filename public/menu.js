@@ -1882,6 +1882,14 @@ if(false) {
         }
 
         setData(data) {
+            // удалила элементы на сервере, на клиент пришли айтемы с null
+            // при удалении с начала массива, позиции переписываются, поэтому:
+            for (let i=data.items.length-1; i > 0; i--) {
+                if (data.items[i] == null) {
+                    data.items.splice(i, 1);
+                }
+            }
+
             this.data = data;
             this.render();
         }
@@ -1905,8 +1913,8 @@ if(false) {
         removeItem(ev) {
             let currentRemoveIcon = ev.target,
                 currentItem,
-                currentList,
-                customChangeDataEv;
+                currentItemTitle,
+                currentList;
 
             if (currentRemoveIcon.classList.contains('js-close')) {
                 // для поддержки в IE11-
@@ -1914,19 +1922,34 @@ if(false) {
                 currentList = currentItem.closest('ul');
                 currentList.removeChild(currentItem);
 
-                customChangeDataEv = new CustomEvent('changeData');
-                this.$app.dispatchEvent(customChangeDataEv);
+                // TODO: нужно сравнение не по title, а по ID (переделать меню-темплейт)
+                currentItemTitle = currentItem.querySelector('.menu__link').textContent;
+
+                this.data.items.forEach((item, index) => {
+                    if (item.title === currentItemTitle) {
+                        this.data.items.splice(index, 1);
+                    }
+                });
+
+                this._addEventOnChangeData();
             }
         }
 
         addCustomerItem(ev) {
             this._addItem(ev.detail);
-
             this.data.items.push(ev.detail);
+            this._addEventOnChangeData();
         }
 
         _addItem(item) {
             this.$menuList.insertAdjacentHTML('beforeEnd', menuTempl(item));
+        }
+
+        _addEventOnChangeData() {
+            let changeDataEv;
+
+            changeDataEv = new CustomEvent('changeData');
+            this.$app.dispatchEvent(changeDataEv);
         }
     }
 
@@ -1947,7 +1970,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, ".menu {\n  padding: .5rem;\n}\n.menu__title {\n  position: relative;\n  margin: 0;\n  font-size: 18px;\n  font-weight: bold;\n  padding: 1rem;\n  margin-bottom: 1rem;\n}\n.menu__title::before {\n  content: '';\n  position: absolute;\n  left: 0;\n  bottom: 0;\n  width: 100%;\n  height: 1px;\n  background-color: #cccccc;\n}\n.menu__list {\n  list-style: none;\n  margin: 0;\n}\n.menu__item {\n  position: relative;\n  display: block;\n}\n.menu__link {\n  display: block;\n  padding: 1rem;\n  font-size: 16px;\n  text-decoration: none;\n  color: #000000;\n  word-wrap: break-word;\n  max-width: 90%;\n}\n.menu__link:hover {\n  text-decoration: underline;\n}\n.menu .close {\n  position: absolute;\n  right: 32px;\n  top: 0;\n  width: 32px;\n  height: 32px;\n  opacity: 0.3;\n  cursor: pointer;\n}\n.menu .close:hover::after,\n.menu .close:hover::before {\n  background-color: #000000;\n}\n.menu .close::after,\n.menu .close::before {\n  position: absolute;\n  left: 15px;\n  content: ' ';\n  height: 33px;\n  width: 2px;\n  background-color: #aaaaaa;\n}\n.menu .close::after {\n  transform: rotate(-45deg);\n}\n.menu .close::before {\n  transform: rotate(45deg);\n}\n", ""]);
+exports.push([module.i, ".menu {\n  padding: .5rem;\n}\n.menu__title {\n  position: relative;\n  margin: 0;\n  font-size: 18px;\n  font-weight: bold;\n  padding: 1rem;\n  margin-bottom: 1rem;\n}\n.menu__title::before {\n  content: '';\n  position: absolute;\n  left: 0;\n  bottom: 0;\n  width: 100%;\n  height: 1px;\n  background-color: #cccccc;\n}\n.menu__list {\n  list-style: none;\n  margin: 0;\n  max-height: 200px;\n  overflow-y: scroll;\n}\n.menu__item {\n  position: relative;\n  display: block;\n}\n.menu__link {\n  display: block;\n  padding: 1rem;\n  font-size: 16px;\n  text-decoration: none;\n  color: #000000;\n  word-wrap: break-word;\n  max-width: 90%;\n}\n.menu__link:hover {\n  text-decoration: underline;\n}\n.menu .close {\n  position: absolute;\n  right: 32px;\n  top: 0;\n  width: 32px;\n  height: 32px;\n  opacity: 0.3;\n  cursor: pointer;\n}\n.menu .close:hover::after,\n.menu .close:hover::before {\n  background-color: #000000;\n}\n.menu .close::after,\n.menu .close::before {\n  position: absolute;\n  left: 15px;\n  content: ' ';\n  height: 33px;\n  width: 2px;\n  background-color: #aaaaaa;\n}\n.menu .close::after {\n  transform: rotate(-45deg);\n}\n.menu .close::before {\n  transform: rotate(45deg);\n}\n", ""]);
 
 // exports
 

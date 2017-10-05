@@ -1885,20 +1885,16 @@ if(false) {
             let $form       = ev.target,
                 $inputUrl   = $form.elements.url,
                 $inputTitle = $form.elements.title,
-                customAddItemEv,
-                customChangeDataEv;
+                addItemEv;
 
-            customAddItemEv = new CustomEvent('addItem', {
+            addItemEv = new CustomEvent('addItem', {
                 detail: {
                     title: $inputTitle.value,
                     url: $inputUrl.value
                 }
             });
 
-            customChangeDataEv = new CustomEvent('changeData');
-
-            this.$app.dispatchEvent(customAddItemEv);
-            this.$app.dispatchEvent(customChangeDataEv);
+            this.$app.dispatchEvent(addItemEv);
 
             $form.reset();
         }
