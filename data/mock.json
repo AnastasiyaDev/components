@@ -1,0 +1,17 @@
+{
+  "title": "Сайты",
+  "items": [
+    {
+      "title": "Медуза",
+      "url": "https://meduza.io/"
+    },
+    {
+      "title": "Яндекс.Новости",
+      "url": "https://news.yandex.ru/"
+    },
+    {
+      "title": "BBC news",
+      "url": "http://www.bbc.com/news"
+    }
+  ]
+}
