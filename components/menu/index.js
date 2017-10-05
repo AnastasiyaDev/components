@@ -17,6 +17,14 @@
         }
 
         setData(data) {
+            // удалила элементы на сервере, на клиент пришли айтемы с null
+            // при удалении с начала массива, позиции переписываются, поэтому:
+            for (let i=data.items.length-1; i > 0; i--) {
+                if (data.items[i] == null) {
+                    data.items.splice(i, 1);
+                }
+            }
+
             this.data = data;
             this.render();
         }
@@ -40,8 +48,8 @@
         removeItem(ev) {
             let currentRemoveIcon = ev.target,
                 currentItem,
-                currentList,
-                customChangeDataEv;
+                currentItemTitle,
+                currentList;
 
             if (currentRemoveIcon.classList.contains('js-close')) {
                 // для поддержки в IE11-
@@ -49,19 +57,34 @@
                 currentList = currentItem.closest('ul');
                 currentList.removeChild(currentItem);
 
-                customChangeDataEv = new CustomEvent('changeData');
-                this.$app.dispatchEvent(customChangeDataEv);
+                // TODO: нужно сравнение не по title, а по ID (переделать меню-темплейт)
+                currentItemTitle = currentItem.querySelector('.menu__link').textContent;
+
+                this.data.items.forEach((item, index) => {
+                    if (item.title === currentItemTitle) {
+                        this.data.items.splice(index, 1);
+                    }
+                });
+
+                this._addEventOnChangeData();
             }
         }
 
         addCustomerItem(ev) {
             this._addItem(ev.detail);
-
             this.data.items.push(ev.detail);
+            this._addEventOnChangeData();
         }
 
         _addItem(item) {
             this.$menuList.insertAdjacentHTML('beforeEnd', menuTempl(item));
+        }
+
+        _addEventOnChangeData() {
+            let changeDataEv;
+
+            changeDataEv = new CustomEvent('changeData');
+            this.$app.dispatchEvent(changeDataEv);
         }
     }
 
