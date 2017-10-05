@@ -1865,6 +1865,7 @@ if(false) {
     class Form {
         constructor ({el}) {
             this.$container = el;
+            this.$app = el.closest('.js-app');
 
             this.renderForm();
             this.initEvents();
@@ -1884,16 +1885,20 @@ if(false) {
             let $form       = ev.target,
                 $inputUrl   = $form.elements.url,
                 $inputTitle = $form.elements.title,
-                customEv;
+                customAddItemEv,
+                customChangeDataEv;
 
-            customEv = new CustomEvent('addItem', {
+            customAddItemEv = new CustomEvent('addItem', {
                 detail: {
                     title: $inputTitle.value,
                     url: $inputUrl.value
                 }
             });
 
-            document.dispatchEvent(customEv);
+            customChangeDataEv = new CustomEvent('changeData');
+
+            this.$app.dispatchEvent(customAddItemEv);
+            this.$app.dispatchEvent(customChangeDataEv);
 
             $form.reset();
         }
