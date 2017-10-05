@@ -11,33 +11,36 @@
         constructor ({el}) {
             this.menu = new Menu({
                 el: el.querySelector('.js-menu'),
-                data: {
-                    title: 'Сайты',
-                    items: []
-                }
-            });
-
-            this.menu.setData({
-                title: 'Сайты',
-                items: [
-                    {
-                        title: 'Медуза',
-                        url: 'https://meduza.io/'
-                    },
-                    {
-                        title: 'Яндекс.Новости',
-                        url: 'https://news.yandex.ru/'
-                    },
-                    {
-                        title: 'BBC news',
-                        url: 'http://www.bbc.com/news'
-                    }
-                ]
+                data: {}
             });
 
             this.form = new Form({
                 el: el.querySelector('.js-form')
-            })
+            });
+
+            this.loadData();
+        }
+
+        /**
+         * Load data from server
+         */
+        loadData() {
+            const url = '/data/mock.json',
+                  xhr = new XMLHttpRequest();
+
+
+            xhr.addEventListener('readystatechange', (event) => {
+                if (xhr.readyState === 4) {
+                    if (xhr.status !== 200) {
+                        console.error('Сетевая ошибка', xhr);
+                    } else {
+                        this.menu.setData(JSON.parse(xhr.responseText));
+                    }
+                }
+            });
+
+            xhr.open('GET', url, true);
+            xhr.send();
         }
     }
 
