@@ -1,5 +1,6 @@
 require('./index.less');
-let menuTempl = require('./template/menu.hbs');
+let menuTempl = require('./template/menu.hbs'),
+    emptyMenuTempl = require('./template/emptyMenu.hbs');
 
 export class Menu {
     constructor({el, data}) {
@@ -14,12 +15,9 @@ export class Menu {
     }
 
     setData(data) {
-        // удалила элементы на сервере, на клиент пришли айтемы с null
-        // при удалении с начала массива, позиции переписываются, поэтому:
-        for (let i=data.items.length-1; i > 0; i--) {
-            if (data.items[i] == null) {
-                data.items.splice(i, 1);
-            }
+        if (!data) {
+            alert('Ошибка в данных на сервере');
+            return;
         }
 
         this.data = data;
@@ -28,7 +26,21 @@ export class Menu {
 
     render() {
         this.$title.innerText = this.data.title;
-        this.renderItems(this.data.items);
+
+        if (this.data.items) {
+            // удалила элементы на сервере, на клиент пришли айтемы с null
+            // при удалении с начала массива, позиции переписываются, поэтому:
+            for (let i=this.data.items.length-1; i > 0; i--) {
+                if (this.data.items[i] == null) {
+                    this.data.items.splice(i, 1);
+                }
+            }
+            this.renderItems(this.data.items);
+        } else {
+            this.data.items = [];
+            this.$menuList.innerHTML = emptyMenuTempl();
+        }
+
     }
 
     renderItems(items) {
@@ -68,12 +80,14 @@ export class Menu {
     }
 
     addCustomerItem(ev) {
+        console.log(this.data);
         this._addItem(ev.detail);
         this.data.items.push(ev.detail);
         this._addEventOnChangeData();
     }
 
     _addItem(item) {
+        this.$menuList.querySelector('.js-empty-item').remove();
         this.$menuList.insertAdjacentHTML('beforeEnd', menuTempl(item));
     }
 
