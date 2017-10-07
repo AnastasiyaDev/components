@@ -87,7 +87,12 @@ export class Menu {
     }
 
     _addItem(item) {
-        this.$menuList.querySelector('.js-empty-item').remove();
+        let $emptyItem = this.$menuList.querySelector('.js-empty-item');
+
+        if ($emptyItem) {
+            $emptyItem.remove();
+        }
+
         this.$menuList.insertAdjacentHTML('beforeEnd', menuTempl(item));
     }
 
