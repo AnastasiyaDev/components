@@ -7,8 +7,6 @@ module.exports = {
     entry: {
         common: './common/index.js'
         ,app: './app/index.js'
-        ,menu: './menu/index.js'
-        ,form: './form/index.js'
     },
     output: {
         path: path.join(__dirname, 'public'),
