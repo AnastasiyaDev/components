@@ -1,8 +1,18 @@
 require('./index.less');
+
 let menuTempl = require('./template/menu.hbs'),
     emptyMenuTempl = require('./template/emptyMenu.hbs');
 
+/**
+ * Class representing menu for web application
+ */
 export class Menu {
+    /**
+     * Create a menu
+     * @param {Object} menuSetting
+     * @param {HTMLElement} menuSetting.el
+     * @param {Object} menuSetting.data
+     */
     constructor({el, data}) {
         this.$el  = el;
         this.data = data;
@@ -14,6 +24,10 @@ export class Menu {
         this.initEvents();
     }
 
+    /**
+     * Update data
+     * @param {Object} data
+     */
     setData(data) {
         if (!data) {
             console.error('Ошибка в данных на сервере');
@@ -24,6 +38,9 @@ export class Menu {
         this.render();
     }
 
+    /**
+     * Render data
+     */
     render() {
         this.$title.innerText = this.data.title;
 
@@ -43,17 +60,28 @@ export class Menu {
 
     }
 
+    /**
+     * Render menu items
+     * @param {Array} items
+     */
     renderItems(items) {
         items.forEach(item => {
             this._addItem(item);
         });
     }
 
+    /**
+     * Initialization event handlers
+     */
     initEvents() {
         this.$menuList.addEventListener('click', this.removeItem.bind(this));
         this.$app.addEventListener('addItem', this.addCustomerItem.bind(this));
     }
 
+    /**
+     * Remove item from menu
+     * @param {Event} ev
+     */
     removeItem(ev) {
         let currentRemoveIcon = ev.target,
             currentItem,
@@ -79,12 +107,21 @@ export class Menu {
         }
     }
 
+    /**
+     * Handler for add custom item to menu
+     * @param {Event} ev
+     */
     addCustomerItem(ev) {
         this._addItem(ev.detail);
         this.data.items.push(ev.detail);
         this._addEventOnChangeData();
     }
 
+    /**
+     * Add item to menu
+     * @param {Object} item
+     * @private
+     */
     _addItem(item) {
         let $emptyItem = this.$menuList.querySelector('.js-empty-item');
 
@@ -95,6 +132,10 @@ export class Menu {
         this.$menuList.insertAdjacentHTML('beforeEnd', menuTempl(item));
     }
 
+    /**
+     * Generate event on change data
+     * @private
+     */
     _addEventOnChangeData() {
         let changeDataEv;
 
