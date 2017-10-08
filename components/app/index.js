@@ -1,67 +1,83 @@
-(function() {
-    'use strict';
+require('./index.less');
 
-    require('./index.less');
+// import
+import {Service} from '../../service/index';
+import {Menu} from '../menu/index';
+import {Form} from '../form/index';
 
-    // import
-    const Menu = window.Menu;
-    const Form = window.Form;
+/**
+ * Class representing web application
+ */
+class App {
+    /**
+     * Create a application
+     * @param {Object} appSetting
+     * @param {HTMLElement} appSetting.el
+     */
+    constructor ({el}) {
+        this.$app = el;
 
-    class App {
-        constructor ({el}) {
-            this.$app = el;
-            this.serverUrl = 'https://components1808.firebaseio.com/menu/-Kvhzifyb_lsuVgKsNIc.json';
+        this.menu = new Menu({
+            el: el.querySelector('.js-menu'),
+            data: {}
+        });
 
-            this.menu = new Menu({
-                el: el.querySelector('.js-menu'),
-                data: {}
-            });
+        this.form = new Form({
+            el: el.querySelector('.js-form')
+        });
 
-            this.form = new Form({
-                el: el.querySelector('.js-form')
-            });
-
-            this.loadData();
-
-            this.initEvents();
-        }
-
-        /**
-         * Load data from server
-         */
-        loadData() {
-            const xhr = new XMLHttpRequest();
-
-            xhr.addEventListener('readystatechange', (event) => {
-                if (xhr.readyState === 4) {
-                    if (xhr.status !== 200) {
-                        console.error('Сетевая ошибка', xhr);
-                    } else {
-                        this.menu.setData(JSON.parse(xhr.responseText));
-                    }
-                }
-            });
-
-            xhr.open('GET', this.serverUrl, true);
-            xhr.send();
-        }
-
-        initEvents() {
-            this.$app.addEventListener('changeData', this.uploadData.bind(this));
-        }
-
-        /**
-         * Upload data to the server
-         */
-        uploadData() {
-            const xhr = new XMLHttpRequest();
-
-            xhr.open('PUT', this.serverUrl, true);
-            xhr.send(JSON.stringify(this.menu.data));
-        }
+        this.loadData();
+        this.initEvents();
     }
 
-    // export
-    window.App = App;
+    /**
+     * Load data from server
+     */
+    loadData() {
+        Service.getItems()
+        .then(this._updateMenu.bind(this))
+        .catch(error => {
+            this._showErrorMsg(error);
+        });
+    }
 
-})();
+    /**
+     * Initialization event handlers
+     */
+    initEvents() {
+        this.$app.addEventListener('changeData', this.uploadData.bind(this));
+    }
+
+    /**
+     * Upload data to the server
+     */
+    uploadData() {
+        Service.putItems(this.menu.data)
+            .then(console.info('Данные на сервере обновились'))
+            .catch(error => {
+                this._showErrorMsg(error);
+            });
+    }
+
+    /**
+     * @param {*} newItems
+     * @return {Promise<undefined>}
+     */
+    _updateMenu(newItems) {
+        return new Promise((resolve, reject) => {
+            this.menu.setData(newItems);
+            resolve();
+        });
+    }
+
+    /**
+     * Show error message in console
+     * @throws error
+     */
+    static _showErrorMsg(error) {
+        console.log(error);
+    }
+}
+
+// export
+window.App = App;
