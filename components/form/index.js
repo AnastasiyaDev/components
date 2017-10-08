@@ -1,7 +1,15 @@
 require('./index.less');
 let formTempl = require('./template/form.hbs');
 
+/**
+ * Class representing form for web application
+ */
 export class Form {
+    /**
+     * Create a form
+     * @param {Object} formSetting
+     * @param {HTMLElement} formSetting.el
+     */
     constructor ({el}) {
         this.$container = el;
         this.$app = el.closest('.js-app');
@@ -10,14 +18,24 @@ export class Form {
         this.initEvents();
     }
 
+    /**
+     * Create HTML
+     */
     renderForm() {
         this.$container.innerHTML = formTempl();
     }
 
+    /**
+     * Initialization event handlers
+     */
     initEvents() {
         this.$container.addEventListener('submit', this.submitForm.bind(this));
     }
 
+    /**
+     * Submit form
+     * @param {Event} ev
+     */
     submitForm(ev) {
         ev.preventDefault();
 
