@@ -57,7 +57,6 @@ export class Menu {
             this.data.items = [];
             this.$menuList.innerHTML = emptyMenuTempl();
         }
-
     }
 
     /**
@@ -66,6 +65,7 @@ export class Menu {
      */
     renderItems(items) {
         items.forEach(item => {
+            item.index = this.data.items.length;
             this._addItem(item);
         });
     }
@@ -76,6 +76,7 @@ export class Menu {
     initEvents() {
         this.$menuList.addEventListener('click', this.removeItem.bind(this));
         this.$app.addEventListener('addItem', this.addCustomerItem.bind(this));
+        this.$app.addEventListener('titleValidation', this.compareTitles.bind(this));
     }
 
     /**
@@ -94,7 +95,7 @@ export class Menu {
             currentList = currentItem.closest('ul');
             currentList.removeChild(currentItem);
 
-            // TODO: нужно сравнение не по title, а по ID (переделать меню-темплейт)
+            // item.title - уникальные
             currentItemTitle = currentItem.querySelector('.menu__link').textContent;
 
             this.data.items.forEach((item, index) => {
@@ -115,6 +116,34 @@ export class Menu {
         this._addItem(ev.detail);
         this.data.items.push(ev.detail);
         this._addEventOnChangeData();
+    }
+
+    /**
+     * Compare titles
+     * @param {Event} ev
+     */
+    compareTitles(ev) {
+        let result;
+
+        result = this.data.items.some(item => {return item.title === ev.detail.value});
+
+        this.addResultValidationEv(result);
+    }
+
+    /**
+     * Create checkUniqTitle event
+     * @param {Boolean} result
+     */
+    addResultValidationEv(result) {
+        let compareTitlesEv;
+
+        compareTitlesEv = new CustomEvent('checkUniqTitle', {
+            detail: {
+                isUniqTitle: result
+            }
+        });
+
+        this.$app.dispatchEvent(compareTitlesEv);
     }
 
     /**
