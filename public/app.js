@@ -659,7 +659,7 @@ function updateLink(linkElement, options, obj) {
 
 // Create a simple path alias to allow browserify to resolve
 // the runtime on a supported path.
-module.exports = __webpack_require__(21)['default'];
+module.exports = __webpack_require__(22)['default'];
 
 
 /***/ }),
@@ -776,11 +776,11 @@ var _exception = __webpack_require__(2);
 
 var _exception2 = _interopRequireDefault(_exception);
 
-var _helpers = __webpack_require__(24);
+var _helpers = __webpack_require__(25);
 
-var _decorators = __webpack_require__(22);
+var _decorators = __webpack_require__(23);
 
-var _logger = __webpack_require__(32);
+var _logger = __webpack_require__(33);
 
 var _logger2 = _interopRequireDefault(_logger);
 
@@ -873,8 +873,10 @@ exports.logger = _logger2['default'];
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-__webpack_require__(36);
+__webpack_require__(37);
+
 let formTempl = __webpack_require__(18);
+let titleErrorMsg = __webpack_require__(19);
 
 /**
  * Class representing form for web application
@@ -886,8 +888,8 @@ class Form {
      * @param {HTMLElement} formSetting.el
      */
     constructor ({el}) {
-        this.$container = el;
-        this.$app = el.closest('.js-app');
+        this.$container  = el;
+        this.$app        = el.closest('.js-app');
 
         this.renderForm();
         this.initEvents();
@@ -905,6 +907,44 @@ class Form {
      */
     initEvents() {
         this.$container.addEventListener('submit', this.submitForm.bind(this));
+        this.$container.addEventListener('change', this.changeTitleField.bind(this));
+        this.$app.addEventListener('checkUniqTitle', this.itemTitleValidation.bind(this));
+    }
+
+    /**
+     * Change title field
+     * @param {Event} ev
+     */
+    changeTitleField(ev) {
+        let $inputTitle = ev.target,
+            titleValidEv;
+
+        if ($inputTitle.classList.contains('js-input-title')) {
+            titleValidEv = new CustomEvent('titleValidation', {
+                detail: {
+                    value: $inputTitle.value
+                }
+            });
+
+            this.$app.dispatchEvent(titleValidEv);
+        }
+    }
+
+    /**
+     * Item title validation
+     * @param {Event} ev
+     */
+    itemTitleValidation(ev) {
+        let $submitBtn = this.$container.querySelector('.js-submit-item'),
+            $formErrorMsg = this.$container.querySelector('.js-form-error-msg');
+
+        if (ev.detail.isUniqTitle) {
+            $submitBtn.disabled = true;
+            this.$container.insertAdjacentHTML('beforeEnd', titleErrorMsg());
+        } else if ($submitBtn.disabled) {
+            $submitBtn.disabled = false;
+            $formErrorMsg.remove();
+        }
     }
 
     /**
@@ -941,10 +981,10 @@ class Form {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-__webpack_require__(37);
+__webpack_require__(38);
 
-let menuTempl = __webpack_require__(20),
-    emptyMenuTempl = __webpack_require__(19);
+let menuTempl = __webpack_require__(21),
+    emptyMenuTempl = __webpack_require__(20);
 
 /**
  * Class representing menu for web application
@@ -1000,7 +1040,6 @@ class Menu {
             this.data.items = [];
             this.$menuList.innerHTML = emptyMenuTempl();
         }
-
     }
 
     /**
@@ -1009,6 +1048,7 @@ class Menu {
      */
     renderItems(items) {
         items.forEach(item => {
+            item.index = this.data.items.length;
             this._addItem(item);
         });
     }
@@ -1019,6 +1059,7 @@ class Menu {
     initEvents() {
         this.$menuList.addEventListener('click', this.removeItem.bind(this));
         this.$app.addEventListener('addItem', this.addCustomerItem.bind(this));
+        this.$app.addEventListener('titleValidation', this.compareTitles.bind(this));
     }
 
     /**
@@ -1037,7 +1078,7 @@ class Menu {
             currentList = currentItem.closest('ul');
             currentList.removeChild(currentItem);
 
-            // TODO: нужно сравнение не по title, а по ID (переделать меню-темплейт)
+            // item.title - уникальные
             currentItemTitle = currentItem.querySelector('.menu__link').textContent;
 
             this.data.items.forEach((item, index) => {
@@ -1058,6 +1099,34 @@ class Menu {
         this._addItem(ev.detail);
         this.data.items.push(ev.detail);
         this._addEventOnChangeData();
+    }
+
+    /**
+     * Compare titles
+     * @param {Event} ev
+     */
+    compareTitles(ev) {
+        let result;
+
+        result = this.data.items.some(item => {return item.title === ev.detail.value});
+
+        this.addResultValidationEv(result);
+    }
+
+    /**
+     * Create checkUniqTitle event
+     * @param {Boolean} result
+     */
+    addResultValidationEv(result) {
+        let compareTitlesEv;
+
+        compareTitlesEv = new CustomEvent('checkUniqTitle', {
+            detail: {
+                isUniqTitle: result
+            }
+        });
+
+        this.$app.dispatchEvent(compareTitlesEv);
     }
 
     /**
@@ -1297,7 +1366,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, ".form {\n  padding: 1.5rem;\n}\n.form__row {\n  position: relative;\n  font-size: 0;\n}\n.form__input {\n  display: inline-block;\n  width: 100%;\n  border: 1px solid #e5e5e5;\n  border-radius: .5rem;\n  font-size: 16px;\n  padding: .8rem 1rem;\n  box-shadow: none;\n  -webkit-appearance: none;\n}\n.form__input::-webkit-input-placeholder,\n.form__input:-moz-placeholder,\n.form__input::-moz-placeholder,\n.form__input:-ms-input-placeholder {\n  color: #aaaaaa;\n}\n.form__input:first-child {\n  margin-right: 2%;\n}\n@media (max-width: 767px) {\n  .form__input:first-child {\n    margin-right: 0;\n    margin-bottom: 1rem;\n  }\n}\n.form__input:focus:invalid {\n  border-color: #e23434;\n}\n.form__input_small {\n  width: 35%;\n}\n@media (max-width: 767px) {\n  .form__input_small {\n    width: 100%;\n  }\n}\n.form__btn {\n  width: 25%;\n  margin-left: 3%;\n  background-color: #000000;\n  color: #ffffff;\n  vertical-align: top;\n  font-size: 16px;\n  padding: .8rem 2rem;\n}\n@media (max-width: 767px) {\n  .form__btn {\n    width: 100%;\n    margin-left: 0;\n    margin-top: 1rem;\n  }\n}\n.form__btn:hover {\n  background-color: #31b159;\n}\n", ""]);
+exports.push([module.i, ".form {\n  padding: 1.5rem;\n}\n.form__row {\n  position: relative;\n  font-size: 0;\n}\n.form__input {\n  display: inline-block;\n  width: 100%;\n  border: 1px solid #e5e5e5;\n  border-radius: .5rem;\n  font-size: 16px;\n  padding: .8rem 1rem;\n  box-shadow: none;\n  -webkit-appearance: none;\n}\n.form__input::-webkit-input-placeholder,\n.form__input:-moz-placeholder,\n.form__input::-moz-placeholder,\n.form__input:-ms-input-placeholder {\n  color: #aaaaaa;\n}\n.form__input:first-child {\n  margin-right: 2%;\n}\n@media (max-width: 767px) {\n  .form__input:first-child {\n    margin-right: 0;\n    margin-bottom: 1rem;\n  }\n}\n.form__input:focus:invalid {\n  border-color: #e23434;\n}\n.form__input_small {\n  width: 35%;\n}\n@media (max-width: 767px) {\n  .form__input_small {\n    width: 100%;\n  }\n}\n.form__btn {\n  width: 25%;\n  margin-left: 3%;\n  background-color: #000000;\n  color: #ffffff;\n  vertical-align: top;\n  font-size: 16px;\n  padding: .8rem 2rem;\n}\n@media (max-width: 767px) {\n  .form__btn {\n    width: 100%;\n    margin-left: 0;\n    margin-top: 1rem;\n  }\n}\n.form__btn:hover {\n  background-color: #31b159;\n}\n.form__btn[disabled] {\n  opacity: 0.5;\n  cursor: not-allowed;\n}\n.form__btn[disabled]:hover {\n  background-color: #000000;\n}\n.form__error {\n  position: absolute;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  color: #e23434;\n  text-align: center;\n}\n", ""]);
 
 // exports
 
@@ -1323,7 +1392,7 @@ exports.push([module.i, ".menu {\n  padding: .5rem;\n}\n.menu__title {\n  positi
 var Handlebars = __webpack_require__(4);
 function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
 module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<form class=\"form js-add-item-form\">\n    <div class=\"form__row\">\n        <input class=\"form__input form__input_small\"\n               type=\"url\"\n               name=\"url\"\n               required\n               placeholder=\"url\">\n        <input class=\"form__input form__input_small\"\n               type=\"text\"\n               name=\"title\"\n               required\n               placeholder=\"title\">\n        <button class=\"form__btn\" type=\"submit\">Добавить</button>\n    </div>\n</form>\n";
+    return "<form class=\"form js-add-item-form\">\n    <div class=\"form__row\">\n        <input class=\"form__input form__input_small\"\n               type=\"url\"\n               name=\"url\"\n               required\n               placeholder=\"url\">\n        <input class=\"form__input form__input_small js-input-title\"\n               type=\"text\"\n               name=\"title\"\n               required\n               placeholder=\"title\">\n        <button class=\"form__btn js-submit-item\" type=\"submit\">Добавить</button>\n    </div>\n</form>\n";
 },"useData":true});
 
 /***/ }),
@@ -1333,11 +1402,21 @@ module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,"
 var Handlebars = __webpack_require__(4);
 function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
 module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<li class=\"menu__item_empty js-empty-item\">\n    Пока что список пуст, если хотите посмотреть как выглядить меню, пожалуйста, заполните форму :)\n</li>\n";
+    return "<span class=\"form__error js-form-error-msg\">Название уже существует</span>\n";
 },"useData":true});
 
 /***/ }),
 /* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Handlebars = __webpack_require__(4);
+function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
+module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "<li class=\"menu__item_empty js-empty-item\">\n    Пока что список пуст, если хотите посмотреть как выглядить меню, пожалуйста, заполните форму :)\n</li>\n";
+},"useData":true});
+
+/***/ }),
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Handlebars = __webpack_require__(4);
@@ -1353,7 +1432,7 @@ module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,"
 },"useData":true});
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1375,7 +1454,7 @@ var base = _interopRequireWildcard(_handlebarsBase);
 // Each of these augment the Handlebars object. No need to setup here.
 // (This is done to easily share code between commonjs and browse envs)
 
-var _handlebarsSafeString = __webpack_require__(35);
+var _handlebarsSafeString = __webpack_require__(36);
 
 var _handlebarsSafeString2 = _interopRequireDefault(_handlebarsSafeString);
 
@@ -1387,11 +1466,11 @@ var _handlebarsUtils = __webpack_require__(0);
 
 var Utils = _interopRequireWildcard(_handlebarsUtils);
 
-var _handlebarsRuntime = __webpack_require__(34);
+var _handlebarsRuntime = __webpack_require__(35);
 
 var runtime = _interopRequireWildcard(_handlebarsRuntime);
 
-var _handlebarsNoConflict = __webpack_require__(33);
+var _handlebarsNoConflict = __webpack_require__(34);
 
 var _handlebarsNoConflict2 = _interopRequireDefault(_handlebarsNoConflict);
 
@@ -1426,7 +1505,7 @@ module.exports = exports['default'];
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1438,7 +1517,7 @@ exports.registerDefaultDecorators = registerDefaultDecorators;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _decoratorsInline = __webpack_require__(23);
+var _decoratorsInline = __webpack_require__(24);
 
 var _decoratorsInline2 = _interopRequireDefault(_decoratorsInline);
 
@@ -1449,7 +1528,7 @@ function registerDefaultDecorators(instance) {
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1485,7 +1564,7 @@ module.exports = exports['default'];
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1497,31 +1576,31 @@ exports.registerDefaultHelpers = registerDefaultHelpers;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _helpersBlockHelperMissing = __webpack_require__(25);
+var _helpersBlockHelperMissing = __webpack_require__(26);
 
 var _helpersBlockHelperMissing2 = _interopRequireDefault(_helpersBlockHelperMissing);
 
-var _helpersEach = __webpack_require__(26);
+var _helpersEach = __webpack_require__(27);
 
 var _helpersEach2 = _interopRequireDefault(_helpersEach);
 
-var _helpersHelperMissing = __webpack_require__(27);
+var _helpersHelperMissing = __webpack_require__(28);
 
 var _helpersHelperMissing2 = _interopRequireDefault(_helpersHelperMissing);
 
-var _helpersIf = __webpack_require__(28);
+var _helpersIf = __webpack_require__(29);
 
 var _helpersIf2 = _interopRequireDefault(_helpersIf);
 
-var _helpersLog = __webpack_require__(29);
+var _helpersLog = __webpack_require__(30);
 
 var _helpersLog2 = _interopRequireDefault(_helpersLog);
 
-var _helpersLookup = __webpack_require__(30);
+var _helpersLookup = __webpack_require__(31);
 
 var _helpersLookup2 = _interopRequireDefault(_helpersLookup);
 
-var _helpersWith = __webpack_require__(31);
+var _helpersWith = __webpack_require__(32);
 
 var _helpersWith2 = _interopRequireDefault(_helpersWith);
 
@@ -1538,7 +1617,7 @@ function registerDefaultHelpers(instance) {
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1584,7 +1663,7 @@ module.exports = exports['default'];
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1685,7 +1764,7 @@ module.exports = exports['default'];
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1717,7 +1796,7 @@ module.exports = exports['default'];
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1753,7 +1832,7 @@ module.exports = exports['default'];
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1786,7 +1865,7 @@ module.exports = exports['default'];
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1805,7 +1884,7 @@ module.exports = exports['default'];
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1845,7 +1924,7 @@ module.exports = exports['default'];
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1899,7 +1978,7 @@ module.exports = exports['default'];
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1924,10 +2003,10 @@ exports['default'] = function (Handlebars) {
 module.exports = exports['default'];
 //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uLy4uL2xpYi9oYW5kbGViYXJzL25vLWNvbmZsaWN0LmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7O3FCQUNlLFVBQVMsVUFBVSxFQUFFOztBQUVsQyxNQUFJLElBQUksR0FBRyxPQUFPLE1BQU0sS0FBSyxXQUFXLEdBQUcsTUFBTSxHQUFHLE1BQU07TUFDdEQsV0FBVyxHQUFHLElBQUksQ0FBQyxVQUFVLENBQUM7O0FBRWxDLFlBQVUsQ0FBQyxVQUFVLEdBQUcsWUFBVztBQUNqQyxRQUFJLElBQUksQ0FBQyxVQUFVLEtBQUssVUFBVSxFQUFFO0FBQ2xDLFVBQUksQ0FBQyxVQUFVLEdBQUcsV0FBVyxDQUFDO0tBQy9CO0FBQ0QsV0FBTyxVQUFVLENBQUM7R0FDbkIsQ0FBQztDQUNIIiwiZmlsZSI6Im5vLWNvbmZsaWN0LmpzIiwic291cmNlc0NvbnRlbnQiOlsiLyogZ2xvYmFsIHdpbmRvdyAqL1xuZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24oSGFuZGxlYmFycykge1xuICAvKiBpc3RhbmJ1bCBpZ25vcmUgbmV4dCAqL1xuICBsZXQgcm9vdCA9IHR5cGVvZiBnbG9iYWwgIT09ICd1bmRlZmluZWQnID8gZ2xvYmFsIDogd2luZG93LFxuICAgICAgJEhhbmRsZWJhcnMgPSByb290LkhhbmRsZWJhcnM7XG4gIC8qIGlzdGFuYnVsIGlnbm9yZSBuZXh0ICovXG4gIEhhbmRsZWJhcnMubm9Db25mbGljdCA9IGZ1bmN0aW9uKCkge1xuICAgIGlmIChyb290LkhhbmRsZWJhcnMgPT09IEhhbmRsZWJhcnMpIHtcbiAgICAgIHJvb3QuSGFuZGxlYmFycyA9ICRIYW5kbGViYXJzO1xuICAgIH1cbiAgICByZXR1cm4gSGFuZGxlYmFycztcbiAgfTtcbn1cbiJdfQ==
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(38)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(39)))
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2241,7 +2320,7 @@ function executeDecorators(fn, prog, container, depths, data, blockParams) {
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2263,7 +2342,7 @@ module.exports = exports['default'];
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -2294,7 +2373,7 @@ if(false) {
 }
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -2325,7 +2404,7 @@ if(false) {
 }
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports) {
 
 var g;
