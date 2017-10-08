@@ -616,7 +616,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "*,\n*:before,\n*:after {\n  box-sizing: border-box;\n  -webkit-tap-highlight-color: transparent;\n}\n*:focus {\n  outline: none;\n}\nbody,\nhtml {\n  padding: 0;\n  margin: 0;\n  height: 100%;\n}\nhtml {\n  font-family: sans-serif;\n  font-size: 10px;\n}\nbody {\n  background-color: #000000;\n  background: linear-gradient(135deg, #0e0e0e 41%, #7d7e7d 98%);\n  font-size: 14px;\n}\n.main-title {\n  background-color: #ffffff;\n  text-align: center;\n  padding: 1rem 0;\n  margin-top: 2rem;\n}\nul,\np,\nh1,\nh2 {\n  padding: 0;\n  margin: 0;\n  list-style-type: none;\n}\nbutton {\n  background: none;\n  border: none;\n  outline: none;\n  border-radius: 0;\n}\nimg {\n  max-width: 100%;\n  outline: none;\n  border: none;\n}\n", ""]);
+exports.push([module.i, "*,\n*:before,\n*:after {\n  box-sizing: border-box;\n  -webkit-tap-highlight-color: transparent;\n}\n*:focus {\n  outline: none;\n}\nbody,\nhtml {\n  padding: 0;\n  margin: 0;\n  height: 100%;\n}\nhtml {\n  font-family: sans-serif;\n  font-size: 10px;\n}\nbody {\n  background-color: #000000;\n  background: linear-gradient(135deg, #0e0e0e 41%, #7d7e7d 98%);\n  font-size: 14px;\n}\n.main-title {\n  background-color: #ffffff;\n  text-align: center;\n  padding: 1rem 0;\n  position: relative;\n  top: 2rem;\n}\nul,\np,\nh1,\nh2 {\n  padding: 0;\n  margin: 0;\n  list-style-type: none;\n}\nbutton {\n  background: none;\n  border: none;\n  outline: none;\n  border-radius: 0;\n}\nimg {\n  max-width: 100%;\n  outline: none;\n  border: none;\n}\n", ""]);
 
 // exports
 
