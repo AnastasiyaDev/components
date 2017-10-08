@@ -1,13 +1,21 @@
 require('./index.less');
 
 // import
+import {Service} from '../../service/index';
 import {Menu} from '../menu/index';
 import {Form} from '../form/index';
 
+/**
+ * Class representing web application
+ */
 class App {
+    /**
+     * Create a application
+     * @param {Object} appSetting
+     * @param {HTMLElement} appSetting.el
+     */
     constructor ({el}) {
         this.$app = el;
-        this.serverUrl = 'https://components1808.firebaseio.com/menu/-Kvhzifyb_lsuVgKsNIc.json';
 
         this.menu = new Menu({
             el: el.querySelector('.js-menu'),
@@ -19,7 +27,6 @@ class App {
         });
 
         this.loadData();
-
         this.initEvents();
     }
 
@@ -27,22 +34,16 @@ class App {
      * Load data from server
      */
     loadData() {
-        const xhr = new XMLHttpRequest();
-
-        xhr.addEventListener('readystatechange', (event) => {
-            if (xhr.readyState === 4) {
-                if (xhr.status !== 200) {
-                    console.error('Сетевая ошибка', xhr);
-                } else {
-                    this.menu.setData(JSON.parse(xhr.responseText));
-                }
-            }
+        Service.getItems()
+        .then(this._updateMenu.bind(this))
+        .catch(error => {
+            this._showErrorMsg(error);
         });
-
-        xhr.open('GET', this.serverUrl, true);
-        xhr.send();
     }
 
+    /**
+     * Initialization event handlers
+     */
     initEvents() {
         this.$app.addEventListener('changeData', this.uploadData.bind(this));
     }
@@ -51,10 +52,30 @@ class App {
      * Upload data to the server
      */
     uploadData() {
-        const xhr = new XMLHttpRequest();
+        Service.putItems(this.menu.data)
+            .then(console.info('Данные на сервере обновились'))
+            .catch(error => {
+                this._showErrorMsg(error);
+            });
+    }
 
-        xhr.open('PUT', this.serverUrl, true);
-        xhr.send(JSON.stringify(this.menu.data));
+    /**
+     * @param {*} newItems
+     * @return {Promise<undefined>}
+     */
+    _updateMenu(newItems) {
+        return new Promise((resolve, reject) => {
+            this.menu.setData(newItems);
+            resolve();
+        });
+    }
+
+    /**
+     * Show error message in console
+     * @throws error
+     */
+    static _showErrorMsg(error) {
+        console.log(error);
     }
 }
 

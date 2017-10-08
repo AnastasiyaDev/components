@@ -16,7 +16,7 @@ export class Menu {
 
     setData(data) {
         if (!data) {
-            alert('Ошибка в данных на сервере');
+            console.error('Ошибка в данных на сервере');
             return;
         }
 
@@ -80,7 +80,6 @@ export class Menu {
     }
 
     addCustomerItem(ev) {
-        console.log(this.data);
         this._addItem(ev.detail);
         this.data.items.push(ev.detail);
         this._addEventOnChangeData();
