@@ -65,5 +65,23 @@
         &:hover {
             background-color: @green;
         }
+
+        &[disabled] {
+            opacity: 0.5;
+            cursor: not-allowed;
+
+            &:hover {
+                background-color: @black;
+            }
+        }
+    }
+
+    &__error {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        color: @red;
+        text-align: center;
     }
 }
